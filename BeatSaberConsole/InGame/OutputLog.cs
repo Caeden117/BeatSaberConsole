@@ -65,44 +65,46 @@ namespace BeatSaberConsole
             consoleTMP.gameObject.transform.position = Config.outputPos;
             consoleTMP.gameObject.transform.rotation = Quaternion.Euler(Config.outputRot);
             colorisedConsole.Clear();
-            try{
-            int offset = console.Count() - Config.lines - 1;
-            if (offset < 0) offset = 0;
-            for (var i = 0; i < console.Count(); i++)
+            try
             {
-                string line = console[i];
-                string prefix = "";
-                char[] prefixCutoffs = Plugin.prefixCutoffs;
-                List<int> prefixIndex = new List<int>();
-                foreach(char end in prefixCutoffs)
+                int offset = console.Count() - Config.lines - 1;
+                if (offset < 0) offset = 0;
+                for (var i = 0; i < console.Count(); i++)
                 {
-                    if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
-                }
-                prefixIndex.Sort();
-                prefix = line.Substring(0, prefixIndex.Last());
+                    string line = console[i];
+                    string prefix = "";
+                    char[] prefixCutoffs = Plugin.prefixCutoffs;
+                    List<int> prefixIndex = new List<int>();
+                    foreach (char end in prefixCutoffs)
+                    {
+                        if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
+                    }
+                    prefixIndex.Sort();
+                    prefix = line.Substring(0, prefixIndex.Last());
 
-                if (line.ToUpper().Contains("EXCEPTION"))
-                    colorisedConsole.Add($"<color=#550000>{line}</color>");
-                else if (line.ToUpper().Contains(" AT"))
-                {
-                    if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                    if (line.ToUpper().Contains("EXCEPTION"))
                         colorisedConsole.Add($"<color=#550000>{line}</color>");
-                }
-                else
-                {
-                    if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
-                        colorisedConsole.Add($"<color=#FFA500>{line}</color>");
-                    else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
-                        colorisedConsole.Add($"<color=#FF0000>{line}</color>");
-                    else if (prefix.ToUpper().Contains("FATAL"))
-                        colorisedConsole.Add($"<color=#550000>{line}</color>");
+                    else if (line.ToUpper().Contains(" AT"))
+                    {
+                        if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                            colorisedConsole.Add($"<color=#550000>{line}</color>");
+                    }
                     else
-                        colorisedConsole.Add($"<color=#555555>{line}</color>");
+                    {
+                        if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
+                            colorisedConsole.Add($"<color=#FFA500>{line}</color>");
+                        else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
+                            colorisedConsole.Add($"<color=#FF0000>{line}</color>");
+                        else if (prefix.ToUpper().Contains("FATAL"))
+                            colorisedConsole.Add($"<color=#550000>{line}</color>");
+                        else
+                            colorisedConsole.Add($"<color=#555555>{line}</color>");
+                    }
                 }
+                consoleTMP.text = $"<size=400%>Output Log</size>Updating in real time!\n";
+                consoleTMP.text += String.Join("\n", colorisedConsole);
             }
-            consoleTMP.text = $"<size=400%>Output Log</size>Updating in real time!\n";
-            consoleTMP.text += String.Join("\n", colorisedConsole);
-           }catch() {} //formatting when I get home omegalul
+            catch { } //TeamViewer is a legend
         }
     }
 }
