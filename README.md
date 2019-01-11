@@ -1,5 +1,5 @@
 # Beat Saber Console
-Displays both the Console and the Output Log in game, compete with fancy color highlighting.
+Displays both the Console and the Output Log in game, complete with fancy color highlighting.
 
 ![](https://cdn.discordapp.com/attachments/441819897941458944/533119304414265344/unknown.png)
 
