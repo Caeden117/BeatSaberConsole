@@ -65,6 +65,7 @@ namespace BeatSaberConsole
             consoleTMP.gameObject.transform.position = Config.outputPos;
             consoleTMP.gameObject.transform.rotation = Quaternion.Euler(Config.outputRot);
             colorisedConsole.Clear();
+            try{
             int offset = console.Count() - Config.lines - 1;
             if (offset < 0) offset = 0;
             for (var i = 0; i < console.Count(); i++)
@@ -101,6 +102,7 @@ namespace BeatSaberConsole
             }
             consoleTMP.text = $"<size=400%>Output Log</size>Updating in real time!\n";
             consoleTMP.text += String.Join("\n", colorisedConsole);
+           }catch() {} //formatting when I get home omegalul
         }
     }
 }
