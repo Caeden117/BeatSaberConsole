@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Util\Reaxt.cs" />
     <Compile Include="Util\Config.cs" />
     <Compile Include="InGame\ConsoleWindow.cs" />
     <Compile Include="InGame\ModPanel.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="InGame\OutputLog.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\Reaxt.cs" />
     <Compile Include="Util\UI.cs" />
   </ItemGroup>
   <ItemGroup />

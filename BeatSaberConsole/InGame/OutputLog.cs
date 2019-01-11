@@ -48,7 +48,7 @@ namespace BeatSaberConsole
             }
             else if (stackTrace.IndexOf("CameraPlus") != -1 && (type == LogType.Error || type == LogType.Exception))
             {
-                //if (Config.hideCommonErrors) return;
+                if (Config.hideCommonErrors) return;
                 console.Add("CameraPlus exceptions plz :pepeHands:");
             }
             else
