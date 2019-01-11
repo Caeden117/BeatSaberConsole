@@ -11,6 +11,8 @@ namespace BeatSaberConsole
         public string Name => "BeatSaberConsole";
         public string Version => "1.0.0";
 
+        internal static char[] prefixCutoffs = new char[] { ']', '|', ':' };
+
         public void OnApplicationStart()
         {
             SceneManager.activeSceneChanged += SceneManagerOnActiveSceneChanged;

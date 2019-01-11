@@ -71,12 +71,14 @@ namespace BeatSaberConsole
             {
                 string line = console[i];
                 string prefix = "";
-                if (line.Contains("|") && line.Contains("]"))
-                    prefix = (line.IndexOf("|") > line.IndexOf("]")) ? line.Substring(0, line.IndexOf("|")) : line.Substring(0, line.IndexOf("]"));
-                else if (line.Contains("|"))
-                    prefix = line.Substring(0, line.IndexOf("|"));
-                else if (line.Contains("]"))
-                    prefix = line.Substring(0, line.IndexOf("]"));
+                char[] prefixCutoffs = Plugin.prefixCutoffs;
+                List<int> prefixIndex = new List<int>();
+                foreach(char end in prefixCutoffs)
+                {
+                    if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
+                }
+                prefixIndex.Sort();
+                prefix = line.Substring(0, prefixIndex.Last());
 
                 if (line.ToUpper().Contains("EXCEPTION"))
                     colorisedConsole.Add($"<color=#550000>{line}</color>");
