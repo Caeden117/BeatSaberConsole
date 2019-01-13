@@ -39,7 +39,7 @@ namespace BeatSaberConsole
             consoleTMP.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2f);
             consoleTMP.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
 
-            
+            StartCoroutine(WaitToUpdate());
 
             Console.SetOut(console);
         }
@@ -50,10 +50,23 @@ namespace BeatSaberConsole
             Plugin.Log("Console has returned to its default console window.");
         }
 
+        IEnumerator WaitToUpdate()
+        {
+            while (true)
+            {
+                UpdateConsole();
+                yield return new WaitForSeconds(Config.updateTime);
+            }
+        }
+
         void Update()
         {
             consoleTMP.gameObject.transform.position = Config.consolePos;
             consoleTMP.gameObject.transform.rotation = Quaternion.Euler(Config.consoleRot);
+        }
+
+        void UpdateConsole()
+        {
             try
             {
                 seperatedConsole = console.ToString().Split('\n');
@@ -62,40 +75,47 @@ namespace BeatSaberConsole
                 if (offset < 0) offset = 0;
                 for (var i = offset; i < seperatedConsole.Count(); i++)
                 {
-                    string line = seperatedConsole[i];
-                    string prefix = "";
-                    char[] prefixCutoffs = Plugin.prefixCutoffs;
-                    List<int> prefixIndex = new List<int>();
-                    foreach (char end in prefixCutoffs)
+                    try
                     {
-                        if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
-                    }
-                    prefixIndex.Sort();
-                    prefix = line.Substring(0, prefixIndex.Last());
+                        string line = seperatedConsole[i];
+                        string prefix = "";
+                        char[] prefixCutoffs = Plugin.prefixCutoffs;
+                        List<int> prefixIndex = new List<int>();
+                        foreach (char end in prefixCutoffs)
+                        {
+                            if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
+                        }
+                        prefixIndex.Sort();
+                        prefix = line.Substring(0, prefixIndex.Last());
 
-                    if (line.ToUpper().Contains("EXCEPTION"))
-                        colorisedConsole.Add($"<color=#550000>{line}</color>");
-                    else if (line.ToUpper().Contains(" AT"))
-                    {
-                        if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                        if (line.ToUpper().Contains("EXCEPTION"))
                             colorisedConsole.Add($"<color=#550000>{line}</color>");
-                    }
-                    else
-                    {
-                        if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
-                            colorisedConsole.Add($"<color=#FFA500>{line}</color>");
-                        else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
-                            colorisedConsole.Add($"<color=#FF0000>{line}</color>");
-                        else if (prefix.ToUpper().Contains("FATAL"))
-                            colorisedConsole.Add($"<color=#550000>{line}</color>");
+                        else if (line.ToUpper().Contains(" AT"))
+                        {
+                            if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                                colorisedConsole.Add($"<color=#550000>{line}</color>");
+                        }
                         else
-                            colorisedConsole.Add($"<color=#555555>{line}</color>");
+                        {
+                            if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
+                                colorisedConsole.Add($"<color=#FFA500>{line}</color>");
+                            else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
+                                colorisedConsole.Add($"<color=#FF0000>{line}</color>");
+                            else if (prefix.ToUpper().Contains("FATAL"))
+                                colorisedConsole.Add($"<color=#550000>{line}</color>");
+                            else
+                                colorisedConsole.Add($"<color=#555555>{line}</color>");
+                        }
                     }
+                    catch { }
                 }
                 consoleTMP.text = $"<size=400%>Beat Saber Console</size><size=200%> By Caeden117</size> Showing {Config.lines} lines\n";
                 consoleTMP.text += String.Join("\n", colorisedConsole);
             }
-            catch { } //Spamming Output Log? Not on my watch!
+            catch (Exception e){
+                consoleTMP.text = $"<size=400%>Failed to Load Console</size>\n";
+                consoleTMP.text += e.ToString();
+            } //Spamming Output Log? Not on my watch!
         }
     }
 }

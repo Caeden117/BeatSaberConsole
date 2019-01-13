@@ -42,25 +42,31 @@ namespace BeatSaberConsole
                     try
                     {
                         VRPointer pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
-                        if (pointer != null)
+                        if (pointer != null && found == false)
                         {
                             Material material = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "GlassHandle").FirstOrDefault();
                             if (material)
                             {
                                 moveableMat = new Material(material);
                             }
-                            if (pointer.gameObject.GetComponent<Movement>() == null)
+                            try
                             {
-                                var movePointer = pointer.gameObject.AddComponent<Movement>();
-                                movePointer.Init(cube.transform);
+                                if (pointer.gameObject.GetComponent<Movement>() == null)
+                                {
+                                    var movePointer = pointer.gameObject.AddComponent<Movement>();
+                                    movePointer.Init(cube.transform);
+                                }
+                                
                             }
+                            catch { }
                             found = true;
-                            foreach(Moveable hi in FindObjectsOfType<Moveable>())
+                            foreach (Moveable hi in FindObjectsOfType<Moveable>())
                             {
                                 hi.found = true;
                             }
                             break;
                         }
+                        else if (found) break;
                         Thread.Sleep(10);
                     }
                     catch(Exception e) { Plugin.Log(e.ToString(), Plugin.LogInfo.Error); } //Issues where during scene transitions this *may or may not* crash Beat Saber. Le feex.

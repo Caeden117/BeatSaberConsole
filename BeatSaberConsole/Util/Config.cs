@@ -21,6 +21,18 @@ namespace BeatSaberConsole
             }
         }
 
+        public static float updateTime
+        {
+            get
+            {
+                return ModPrefs.GetFloat("Beat Saber Console", "Console Update Time", 1, true);
+            }
+            set
+            {
+                ModPrefs.SetFloat("Beat Saber Console", "Console Update Time", value);
+            }
+        }
+
         public static bool showStacktrace
         {
             get

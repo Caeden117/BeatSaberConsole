@@ -17,6 +17,14 @@ namespace BeatSaberConsole.Util
             lines.GetValue += delegate { return Config.lines; };
             lines.SetValue += v => Config.lines = v;
 
+            float[] timeOptions = new float[] {
+                0.1f, 0.25f, 0.5f, 0.75f, 1, 1.5f, 2, 3, 4, 5
+            };
+            var time = menu.AddList("Console Update Time", timeOptions, "The amount of time between Console updates in seconds.");
+            time.GetValue += delegate { return Config.updateTime; };
+            time.SetValue += v => Config.updateTime = v;
+            time.FormatValue += delegate (float c) { return $"{c} Sec."; };
+
             var cubes = menu.AddBool("Show Move Bars", "Show the bars that appear under the console.\n<color=#FF0000>Moving the console and output log by clicking under them will still work.</color>");
             cubes.GetValue += delegate { return Config.showMoveCubes; };
             cubes.SetValue += v => Config.showMoveCubes = v;

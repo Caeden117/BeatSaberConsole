@@ -35,6 +35,8 @@ You can drag both Console and Output Log to different positions by clicking and 
 ## Settings Submenu
 **Lines:** Displays the number of lines in Console before it cuts off *(Output Log is not effected by this line maximum)*
 
+**Console Update Time:** The delay between each Console update. Used to decrease the preformance hit by Beat Saber Console.
+
 **Show Movement Bars:** Displays the bars at the bottom that easily allow you to move them. The material I use causes issues in-game *(For an easy example, look at the Ripple effect in the main menu)*. The functionality, however, will not be effected, you still gotta click and drag below the console.
 
 **Hide Common Errors:** Hides common exceptions in the Output Log (*ScoreSaber* exceptions, *CameraPlus* depending on your version, etc.)

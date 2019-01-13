@@ -71,40 +71,47 @@ namespace BeatSaberConsole
                 if (offset < 0) offset = 0;
                 for (var i = 0; i < console.Count(); i++)
                 {
-                    string line = console[i];
-                    string prefix = "";
-                    char[] prefixCutoffs = Plugin.prefixCutoffs;
-                    List<int> prefixIndex = new List<int>();
-                    foreach (char end in prefixCutoffs)
+                    try
                     {
-                        if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
-                    }
-                    prefixIndex.Sort();
-                    prefix = line.Substring(0, prefixIndex.Last());
+                        string line = console[i];
+                        string prefix = "";
+                        char[] prefixCutoffs = Plugin.prefixCutoffs;
+                        List<int> prefixIndex = new List<int>();
+                        foreach (char end in prefixCutoffs)
+                        {
+                            if (line.IndexOf(end) != -1) prefixIndex.Add(line.IndexOf(end));
+                        }
+                        prefixIndex.Sort();
+                        prefix = line.Substring(0, prefixIndex.Last());
 
-                    if (line.ToUpper().Contains("EXCEPTION"))
-                        colorisedConsole.Add($"<color=#550000>{line}</color>");
-                    else if (line.ToUpper().Contains(" AT"))
-                    {
-                        if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                        if (line.ToUpper().Contains("EXCEPTION"))
                             colorisedConsole.Add($"<color=#550000>{line}</color>");
-                    }
-                    else
-                    {
-                        if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
-                            colorisedConsole.Add($"<color=#FFA500>{line}</color>");
-                        else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
-                            colorisedConsole.Add($"<color=#FF0000>{line}</color>");
-                        else if (prefix.ToUpper().Contains("FATAL"))
-                            colorisedConsole.Add($"<color=#550000>{line}</color>");
+                        else if (line.ToUpper().Contains(" AT"))
+                        {
+                            if (colorisedConsole.Last().StartsWith("<color=#550000>"))
+                                colorisedConsole.Add($"<color=#550000>{line}</color>");
+                        }
                         else
-                            colorisedConsole.Add($"<color=#555555>{line}</color>");
+                        {
+                            if (prefix.ToUpper().Contains("WARN") || prefix.ToUpper().Contains("WARNING"))
+                                colorisedConsole.Add($"<color=#FFA500>{line}</color>");
+                            else if (prefix.ToUpper().Contains("ERR") || prefix.ToUpper().Contains("ERROR"))
+                                colorisedConsole.Add($"<color=#FF0000>{line}</color>");
+                            else if (prefix.ToUpper().Contains("FATAL"))
+                                colorisedConsole.Add($"<color=#550000>{line}</color>");
+                            else
+                                colorisedConsole.Add($"<color=#555555>{line}</color>");
+                        }
                     }
+                    catch { }
                 }
                 consoleTMP.text = $"<size=400%>Output Log</size>Updating in real time!\n";
                 consoleTMP.text += String.Join("\n", colorisedConsole);
             }
-            catch { } //TeamViewer is a legend
+            catch (Exception e) {
+                consoleTMP.text = $"<size=400%>Failed to Load Output Log</size>\n";
+                consoleTMP.text += e.ToString();
+            } //TeamViewer is a legend
         }
     }
 }
