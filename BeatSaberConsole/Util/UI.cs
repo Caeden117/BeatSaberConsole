@@ -29,6 +29,10 @@ namespace BeatSaberConsole.Util
             cubes.GetValue += delegate { return Config.showMoveCubes; };
             cubes.SetValue += v => Config.showMoveCubes = v;
 
+            var clipboard = menu.AddBool("Copy Last Exception", "Automatically copies the Console's last logged Exception to your clipboard for easy pasting.\n<color=#FF0000>This will overwrite any previous clipboard entries.</color>");
+            clipboard.GetValue += delegate { return Config.copyToClipboard; };
+            clipboard.SetValue += v => Config.copyToClipboard = v;
+
             var common = menu.AddBool("Hide Common Errors", "Hide common errors from appearing in the Output Log.");
             common.GetValue += delegate { return Config.hideCommonErrors; };
             common.SetValue += v => Config.hideCommonErrors = v;

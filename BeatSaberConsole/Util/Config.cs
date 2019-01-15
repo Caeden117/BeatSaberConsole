@@ -33,6 +33,18 @@ namespace BeatSaberConsole
             }
         }
 
+        public static bool copyToClipboard
+        {
+            get
+            {
+                return ModPrefs.GetBool("Beat Saber Console", "Copy Last Exception To Clipboard", false, true);
+            }
+            set
+            {
+                ModPrefs.SetBool("Beat Saber Console", "Copy Last Exception To Clipboard", value);
+            }
+        }
+
         public static bool showStacktrace
         {
             get

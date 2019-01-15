@@ -45,20 +45,27 @@ namespace BeatSaberConsole
                         if (pointer != null && found == false)
                         {
                             Material material = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "GlassHandle").FirstOrDefault();
-                            if (material)
+                            if (material) moveableMat = new Material(material);
+                            /*
+                             * Big error boi happens right here. It's preventing me from pushing out another test build.
+                             * 
+                             * Not even the ol' reliable try/catch statement can contain this beast.
+                             * IDK sometimes on scene transition/game start it crashes because of an invalid address.
+                             * Everything in output_log.txt is telling me its when adding the component, which I dont think is possible?
+                             * 
+                             * For one, a component has to have a gameobject. Two, I have an if statement up above which checks to see if
+                             * the pointer its found is not null. Movement *should* have a perfectly valid address.
+                             * 
+                             * I cant find out why.
+                             * 
+                             * If anyone can feex this and send me a PR I will forever be in debt.
+                             */
+                            if (pointer.gameObject.GetComponent<Movement>() == null)
                             {
-                                moveableMat = new Material(material);
+                                var movePointer = pointer.gameObject.AddComponent<Movement>(); //output_log.txt leads me to believe this line of code is the source.
+                                movePointer.Init(cube.transform);
                             }
-                            try
-                            {
-                                if (pointer.gameObject.GetComponent<Movement>() == null)
-                                {
-                                    var movePointer = pointer.gameObject.AddComponent<Movement>();
-                                    movePointer.Init(cube.transform);
-                                }
-                                
-                            }
-                            catch { }
+                            //Like literally this if statement right up here can crash the entire game.
                             found = true;
                             foreach (Moveable hi in FindObjectsOfType<Moveable>())
                             {
@@ -69,7 +76,7 @@ namespace BeatSaberConsole
                         else if (found) break;
                         Thread.Sleep(10);
                     }
-                    catch(Exception e) { Plugin.Log(e.ToString(), Plugin.LogInfo.Error); } //Issues where during scene transitions this *may or may not* crash Beat Saber. Le feex.
+                    catch(Exception e) { Plugin.Log(e.ToString(), Plugin.LogInfo.Error); }
                 }
             });
         }
